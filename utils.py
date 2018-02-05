@@ -613,7 +613,10 @@ def compute_ap(gt_boxes, gt_class_ids,
 
     # Compute precision and recall at each prediction box step
     precisions = np.cumsum(pred_match) / (np.arange(len(pred_match)) + 1)
-    recalls = np.cumsum(pred_match).astype(np.float32) / len(gt_match)
+    if len(gt_match) > 0:
+        recalls = np.cumsum(pred_match).astype(np.float32) / len(gt_match)
+    else:
+        recalls = np.zeros(pred_match.shape, dtype=np.float32)
 
     # Pad with start and end values to simplify the math
     precisions = np.concatenate([[0], precisions, [0]])
